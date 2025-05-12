@@ -91,99 +91,59 @@ CLIP_VISION_DIR="$NETWORK_VOLUME/ComfyUI/models/clip_vision"
 VAE_DIR="$NETWORK_VOLUME/ComfyUI/models/vae"
 
 # Download 480p native models
-if [ "$download_480p_native_models" == "true" ]; then
-  echo "Downloading 480p native models..."
+if [ "$download_dev_model" == "true" ]; then
+  echo "Downloading Dev model..."
 
-  download_model "$DIFFUSION_MODELS_DIR" "Wan2_1-I2V-14B-480P_fp8_e5m2.safetensors" \
-    "Kijai/WanVideo_comfy" "Wan2_1-I2V-14B-480P_fp8_e5m2.safetensors"
-
-  download_model "$DIFFUSION_MODELS_DIR" "wan2.1_t2v_14B_bf16.safetensors" \
-    "Comfy-Org/Wan_2.1_ComfyUI_repackaged" "split_files/diffusion_models/wan2.1_t2v_14B_bf16.safetensors"
-
-  download_model "$DIFFUSION_MODELS_DIR" "wan2.1_t2v_1.3B_fp16.safetensors" \
-    "Comfy-Org/Wan_2.1_ComfyUI_repackaged" "split_files/diffusion_models/wan2.1_t2v_1.3B_fp16.safetensors"
+  download_model "$DIFFUSION_MODELS_DIR" "hidream_i1_dev_bf16.safetensors" \
+    "Comfy-Org/HiDream-I1_ComfyUI" "split_files/diffusion_models/hidream_i1_dev_bf16.safetensors"
 fi
 
-# Handle full download (with SDXL)
-if [ "$download_wan_fun_and_sdxl_helper" == "true" ]; then
-  echo "Downloading Wan Fun 1.3B Model"
+if [ "$download_dev_fp8_model" == "true" ]; then
+  echo "Downloading Dev FP* model..."
 
-  download_model "$DIFFUSION_MODELS_DIR" "Wan2.1-Fun-Control1.3B.safetensors" \
-    "alibaba-pai/Wan2.1-Fun-1.3B-Control" "diffusion_pytorch_model.safetensors"
-
-  echo "Downloading Wan Fun 14B Model"
-
-  download_model "$DIFFUSION_MODELS_DIR" "Wan2.1-Fun-Control14B.safetensors" \
-    "alibaba-pai/Wan2.1-Fun-14B-Control" "diffusion_pytorch_model.safetensors"
-
-  UNION_DIR="$NETWORK_VOLUME/ComfyUI/models/controlnet/SDXL/controlnet-union-sdxl-1.0"
-  mkdir -p "$UNION_DIR"
-  if [ ! -f "$UNION_DIR/diffusion_pytorch_model_promax.safetensors" ]; then
-    download_model "$UNION_DIR" "diffusion_pytorch_model_promax.safetensors" \
-    "xinsir/controlnet-union-sdxl-1.0" "diffusion_pytorch_model_promax.safetensors"
-  fi
+  download_model "$DIFFUSION_MODELS_DIR" "hidream_i1_dev_fp8.safetensors" \
+    "Comfy-Org/HiDream-I1_ComfyUI" "split_files/diffusion_models/hidream_i1_dev_fp8.safetensors"
 fi
 
-if [ "$download_vace" == "true" ]; then
-  echo "Downloading Wan 1.3B"
+if [ "$download_full_model" == "true" ]; then
+  echo "Downloading Full model..."
 
-  download_model "$DIFFUSION_MODELS_DIR" "wan2.1_t2v_1.3B_fp16.safetensors" \
-    "Comfy-Org/Wan_2.1_ComfyUI_repackaged" "split_files/diffusion_models/wan2.1_t2v_1.3B_fp16.safetensors"
-
-  echo "Downloading VACE 1.3B Model"
-
-  download_model "$DIFFUSION_MODELS_DIR" "Wan2_1_VACE_1_3B_preview_bf16.safetensors" \
-    "Kijai/WanVideo_comfy" "Wan2_1_VACE_1_3B_preview_bf16.safetensors"
-
-  echo "Downloading VACE text encoder"
-
-  download_model "$TEXT_ENCODERS_DIR" "umt5-xxl-enc-bf16.safetensors" \
-    "Kijai/WanVideo_comfy" "umt5-xxl-enc-bf16.safetensors"
+  download_model "$DIFFUSION_MODELS_DIR" "hidream_i1_full_fp16.safetensors" \
+    "Comfy-Org/HiDream-I1_ComfyUI" "split_files/diffusion_models/hidream_i1_full_fp16.safetensors"
 fi
 
-# Download 720p native models
-if [ "$download_720p_native_models" == "true" ]; then
-  echo "Downloading 720p native models..."
+if [ "$download_full_fp8_model" == "true" ]; then
+  echo "Downloading Full FP8 model..."
 
-  download_model "$DIFFUSION_MODELS_DIR" "wan2.1_i2v_720p_14B_bf16.safetensors" \
-    "Comfy-Org/Wan_2.1_ComfyUI_repackaged" "split_files/diffusion_models/wan2.1_i2v_720p_14B_bf16.safetensors"
-
-  download_model "$DIFFUSION_MODELS_DIR" "wan2.1_t2v_14B_bf16.safetensors" \
-    "Comfy-Org/Wan_2.1_ComfyUI_repackaged" "split_files/diffusion_models/wan2.1_t2v_14B_bf16.safetensors"
-
-  download_model "$DIFFUSION_MODELS_DIR" "wan2.1_t2v_1.3B_fp16.safetensors" \
-    "Comfy-Org/Wan_2.1_ComfyUI_repackaged" "split_files/diffusion_models/wan2.1_t2v_1.3B_fp16.safetensors"
+  download_model "$DIFFUSION_MODELS_DIR" "hidream_i1_full_fp8.safetensors" \
+    "Comfy-Org/HiDream-I1_ComfyUI" "split_files/diffusion_models/hidream_i1_full_fp8.safetensors"
 fi
+
+
 
 # Download text encoders
 echo "Downloading text encoders..."
 
-download_model "$TEXT_ENCODERS_DIR" "umt5_xxl_fp8_e4m3fn_scaled.safetensors" \
-  "Comfy-Org/Wan_2.1_ComfyUI_repackaged" "split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+download_model "$TEXT_ENCODERS_DIR" "clip_l_hidream.safetensors" \
+  "Comfy-Org/HiDream-I1_ComfyUI" "split_files/text_encoders/clip_l_hidream.safetensors"
 
-download_model "$TEXT_ENCODERS_DIR" "open-clip-xlm-roberta-large-vit-huge-14_visual_fp16.safetensors" \
-  "Kijai/WanVideo_comfy" "open-clip-xlm-roberta-large-vit-huge-14_visual_fp16.safetensors"
+download_model "$TEXT_ENCODERS_DIR" "clip_g_hidream.safetensors" \
+  "Comfy-Org/HiDream-I1_ComfyUI" "split_files/text_encoders/clip_g_hidream.safetensors"
 
-# Create CLIP vision directory and download models
-mkdir -p "$CLIP_VISION_DIR"
-download_model "$CLIP_VISION_DIR" "clip_vision_h.safetensors" \
-  "Comfy-Org/Wan_2.1_ComfyUI_repackaged" "split_files/clip_vision/clip_vision_h.safetensors"
+download_model "$TEXT_ENCODERS_DIR" "t5xxl_fp8_e4m3fn_scaled.safetensors" \
+"Comfy-Org/HiDream-I1_ComfyUI" "split_files/text_encoders/t5xxl_fp8_e4m3fn_scaled.safetensors"
+
+download_model "$TEXT_ENCODERS_DIR" "llama_3.1_8b_instruct_fp8_scaled.safetensors" \
+"Comfy-Org/HiDream-I1_ComfyUI" "split_files/text_encoders/llama_3.1_8b_instruct_fp8_scaled.safetensors"
+
 
 # Download VAE
 echo "Downloading VAE..."
-download_model "$VAE_DIR" "Wan2_1_VAE_bf16.safetensors" \
-  "Kijai/WanVideo_comfy" "Wan2_1_VAE_bf16.safetensors"
-
-download_model "$VAE_DIR" "wan_2.1_vae.safetensors" \
-  "Comfy-Org/Wan_2.1_ComfyUI_repackaged" "split_files/vae/wan_2.1_vae.safetensors"
+download_model "$VAE_DIR" "ae.safetensors" \
+  "Comfy-Org/HiDream-I1_ComfyUI" "split_files/vae/ae.safetensors"
 
 # Download upscale model
 echo "Downloading upscale models"
-mkdir -p "$NETWORK_VOLUME/ComfyUI/models/upscale_models"
-if [ ! -f "$NETWORK_VOLUME/ComfyUI/models/upscale_models/4x_foolhardy_Remacri.pt" ]; then
-    wget -O "$NETWORK_VOLUME/ComfyUI/models/upscale_models/4x_foolhardy_Remacri.pt" \
-    https://huggingface.co/FacehugmanIII/4x_foolhardy_Remacri/resolve/main/4x_foolhardy_Remacri.pth
-fi
 if [ ! -f "$NETWORK_VOLUME/ComfyUI/models/upscale_models/4xLSDIR.pth" ]; then
     if [ -f "/4xLSDIR.pth" ]; then
         mv "/4xLSDIR.pth" "$NETWORK_VOLUME/ComfyUI/models/upscale_models/4xLSDIR.pth"
@@ -195,13 +155,6 @@ else
     echo "4xLSDIR.pth already exists. Skipping."
 fi
 
-# Download film network model
-echo "Downloading film network model"
-if [ ! -f "$NETWORK_VOLUME/ComfyUI/models/upscale_models/film_net_fp32.pt" ]; then
-    wget -O "$NETWORK_VOLUME/ComfyUI/models/upscale_models/film_net_fp32.pt" \
-    https://huggingface.co/nguu/film-pytorch/resolve/887b2c42bebcb323baf6c3b6d59304135699b575/film_net_fp32.pt
-fi
-
 echo "Finished downloading models!"
 
 
@@ -211,7 +164,7 @@ mkdir -p "$WORKFLOW_DIR"
 # Ensure the file exists in the current directory before moving it
 cd /
 
-SOURCE_DIR="/ComfyUI-Wan-Template-5090/workflows"
+SOURCE_DIR="/ComfyUI-HiDream-Template/workflows"
 
 # Ensure destination directory exists
 mkdir -p "$WORKFLOW_DIR"
@@ -260,35 +213,10 @@ done
 # Workspace as main working directory
 echo "cd $NETWORK_VOLUME" >> ~/.bashrc
 
-if [ ! -d "$NETWORK_VOLUME/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper" ]; then
-    cd $NETWORK_VOLUME/ComfyUI/custom_nodes
-    git clone https://github.com/kijai/ComfyUI-WanVideoWrapper.git
-else
-    echo "Updating WanVideoWrapper"
-    cd $NETWORK_VOLUME/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper
-    git pull
-fi
-if [ ! -d "$NETWORK_VOLUME/ComfyUI/custom_nodes/ComfyUI-KJNodes" ]; then
-    cd $NETWORK_VOLUME/ComfyUI/custom_nodes
-    git clone https://github.com/kijai/ComfyUI-KJNodes.git
-else
-    echo "Updating KJ Nodes"
-    cd $NETWORK_VOLUME/ComfyUI/custom_nodes/ComfyUI-KJNodes
-    git pull
-fi
-
-# Install dependencies
-pip install --no-cache-dir -r $NETWORK_VOLUME/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt
-pip install --no-cache-dir -r $NETWORK_VOLUME/ComfyUI/custom_nodes/ComfyUI-KJNodes/requirements.txt
-
 # Start ComfyUI
 echo "Starting ComfyUI"
-if [ "$enable_optimizations" = "false" ]; then
+python "$NETWORK_VOLUME/ComfyUI/main.py" --listen --use-sage-attention --preview-method auto
+if [ $? -ne 0 ]; then
+    echo "ComfyUI failed with --use-sage-attention. Retrying without it..."
     python "$NETWORK_VOLUME/ComfyUI/main.py" --listen --preview-method auto
-else
-    python "$NETWORK_VOLUME/ComfyUI/main.py" --listen --use-sage-attention --preview-method auto
-    if [ $? -ne 0 ]; then
-        echo "ComfyUI failed with --use-sage-attention. Retrying without it..."
-        python "$NETWORK_VOLUME/ComfyUI/main.py" --listen --preview-method auto
-    fi
 fi
