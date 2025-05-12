@@ -26,10 +26,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # Use the virtual environment
 ENV PATH="/opt/venv/bin:$PATH"
 
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --pre torch torchvision torchaudio \
-        --index-url https://download.pytorch.org/whl/nightly/cu128
-
 # Core Python tooling
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install packaging setuptools wheel
@@ -40,11 +36,20 @@ RUN --mount=type=cache,target=/root/.cache/pip \
         jupyter-server jupyter-server-terminals \
         ipykernel jupyterlab_code_formatter
 
-# ------------------------------------------------------------
-# ComfyUI install
-# ------------------------------------------------------------
-RUN --mount=type=cache,target=/root/.cache/pip \
-    /usr/bin/yes | comfy --workspace /ComfyUI install
+RUN pip install --upgrade pip && \
+    pip install --pre torch torchvision torchaudio \
+        --index-url https://download.pytorch.org/whl/nightly/cu128 && \
+    # Save exact installed torch versions
+    pip freeze | grep -E "^(torch|torchvision|torchaudio)" > /tmp/torch-constraint.txt && \
+    # Install core tooling
+    pip install packaging setuptools wheel pyyaml gdown triton opencv-python
+
+# 3) Clone ComfyUI
+RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI.git /ComfyUI
+
+# 4) Install ComfyUI requirements using torch constraint file
+RUN cd /ComfyUI && \
+    pip install -r requirements.txt --constraint /tmp/torch-constraint.txt
 
 FROM base AS final
 # Make sure to use the virtual environment here too
@@ -65,6 +70,7 @@ RUN for repo in \
     https://github.com/WASasquatch/was-node-suite-comfyui.git \
     https://github.com/theUpsider/ComfyUI-Logic.git \
     https://github.com/cubiq/ComfyUI_essentials.git \
+    https://github.com/Comfy-Org/ComfyUI-Manager.git \
     https://github.com/chrisgoringe/cg-image-picker.git \
     https://github.com/chflame163/ComfyUI_LayerStyle.git \
     https://github.com/chrisgoringe/cg-use-everywhere.git \
